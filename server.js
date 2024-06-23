@@ -41,8 +41,8 @@ app.post('/store-goal', (req, res) => {
   res.redirect('/');
 });
 
-// Use the PORT from environment variables or default to 3000
-const PORT = process.env.PORT || 3000;
+// Use the PORT from environment variables or default to 80(As EXPOSED in Dockerfile)
+const PORT = process.env.PORT || 80;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
