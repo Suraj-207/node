@@ -36,6 +36,16 @@ app.get('/', (req, res) => {
   `);
 });
 
+// Set up a handler for the SIGINT signal so that we can CTRL+C from the nodejs terminal/container
+process.on('SIGINT', () => {
+  console.info("Server interrupted. Exiting...");
+  
+  server.close(() => {
+    console.log('Server closed.');
+    process.exit(0);
+  });
+});
+
 app.post('/store-goal', (req, res) => {
   const enteredGoal = req.body.goal;
   console.log(enteredGoal);
