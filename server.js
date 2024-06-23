@@ -4,7 +4,6 @@ const app = express();
 
 let userGoal = 'Learn Docker!';
 
-// Use built-in middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static('public'));
@@ -43,7 +42,7 @@ app.post('/store-goal', (req, res) => {
 
 // Use the PORT from environment variables or default to 80(As EXPOSED in Dockerfile)
 const PORT = process.env.PORT || 80;
-
-app.listen(PORT, () => {
+//chsnged to '0.0.0.0' so that it listens for request outside of localhost, not responding when accessed through EC2 public ip
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
