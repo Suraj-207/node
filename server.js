@@ -1,15 +1,10 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 require('dotenv').config();
 const app = express();
 
 let userGoal = 'Learn Docker!';
 
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  })
-);
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static('public'));
 
@@ -21,7 +16,7 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <section>
-          <h2>My Course Goals for Christmas again ${process.env.HOST}</h2>
+          <h2>My Course Goals for Christmas again ${process.env.HOST || ''}</h2>
           <h3>${userGoal}</h3>
         </section>
         <form action="/store-goal" method="POST">
@@ -38,9 +33,16 @@ app.get('/', (req, res) => {
 
 app.post('/store-goal', (req, res) => {
   const enteredGoal = req.body.goal;
-  console.log(enteredGoal);
-  userGoal = enteredGoal;
+  if (enteredGoal) {
+    console.log(enteredGoal);
+    userGoal = enteredGoal;
+  }
   res.redirect('/');
 });
 
-app.listen(300);
+// Use the PORT from environment variables or default to 80(As EXPOSED in Dockerfile)
+const PORT = process.env.PORT || 80;
+//chsnged to '0.0.0.0' so that it listens for request outside of localhost, not responding when accessed through EC2 public ip
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+});
